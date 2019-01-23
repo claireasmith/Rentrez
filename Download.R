@@ -9,10 +9,10 @@ Bburg<-entrez_fetch(db = "nuccore", id = ncbi_ids, rettype = "fasta") # pass the
 
 # Get rid of whitespace and split the string from NCBI into a vector, each component
 # containing a different sequence
-# The first vector is empty - we want vectors 2 to 4
 test <- gsub("\\n*","",Bburg)
 test <- strsplit(test, ">")
-test <- c(test[[1]][2:4])
+test <- unlist(test)
+test <- test[grepl("\\w+", test)] # keep only non-empty vectors
 
 # Loop through each sequence in the vector, take out the id and make it the
 # sequence's name in the vector, remove all other info but the sequence
