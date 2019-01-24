@@ -1,19 +1,17 @@
 ---
 title: "Analysis"
-author: "Claire"
+author: "Claire Smith 10187239"
 date: "January 23, 2019"
 output: html_document
 ---
 
-## Initial analysis
+## Importing and preparing the data
 
-Import and prepare "Sequences.csv".
+Import "Sequences.csv".
 ```{r}
 bseqs <- read.csv("Sequences.csv")
 names(bseqs) <- c("Sequence.ID", "Sequence")
 bseqs$Sequence <- as.character(bseqs$Sequence)
-
-summary(bseqs)
 ```
 
 Count the numbers of each base pair in each of the three sequences. Store them in vectors As, Cs, Gs, and Ts. 
@@ -69,7 +67,7 @@ Table1 <- bseqs %>%
   filter(Sequence.ID == "HQ433692.1") %>%
   select(As, Ts, Gs, Cs)
 
-kable(Table1, caption="HQ433692.1 nucleotide breakdown")
+kable(Table1, caption="HQ433692.1 16S ribosome sequence nucleotide breakdown")
 ```
 
 ## Sequence 2 analysis: HQ433694.1
@@ -87,7 +85,7 @@ Table2 <- bseqs %>%
   filter(Sequence.ID == "HQ433694.1") %>%
   select(As, Ts, Gs, Cs)
 
-kable(Table2, caption="HQ433694.1 nucleotide breakdown")
+kable(Table2, caption="HQ433694.1 16S ribosome sequence nucleotide breakdown")
 ```
 
 ## Sequence 3 analysis: HQ433691.1
@@ -105,7 +103,7 @@ Table3 <- bseqs %>%
   filter(Sequence.ID == "HQ433691.1") %>%
   select(As, Ts, Gs, Cs)
 
-kable(Table3, caption="HQ433691.1 nucleotide breakdown")
+kable(Table3, caption="HQ433691.1 16S ribosome sequence nucleotide breakdown")
 ```
 
 ## GC content
@@ -130,12 +128,15 @@ str(dat)
 summary(dat)
 dat$pGC <- dat$G + dat$C
 
-ggplot(dat, aes(x = Species, y = pGC, colour = Species)) + 
-  geom_jitter() + 
+ggplot(dat, aes(x = ID, y = pGC, colour = Species)) + 
+  geom_point() + 
   theme_classic() +
   scale_y_continuous(name="% GC content") + 
-  scale_x_discrete(name="Species") + 
-  theme(legend.position = "none")
+  scale_x_discrete(name="Individual") + 
+  theme(axis.title.x=element_text(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
 
 ```
 
+Figure 1. Percent GC content of 1000 specimens from three unknown species. 
