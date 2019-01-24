@@ -222,116 +222,75 @@ for (i in 1:nrow(bseqs)){
 <pre class="r"><code>bseqs$Cs &lt;- Cs
 bseqs$Gs &lt;- Gs
 bseqs$As &lt;- As
-bseqs$Ts &lt;- Ts</code></pre>
+bseqs$Ts &lt;- Ts
+
+# Check to see if my counts for the individual nucleotides makes sense
+test_lengths &lt;- bseqs$Cs + bseqs$Gs + bseqs$As + bseqs$Ts
+lengths &lt;- c(nchar(bseqs$Sequence[1]), nchar(bseqs$Sequence[2]), nchar(bseqs$Sequence[3]))
+identical(test_lengths, lengths)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
 <p>Calculate %GC content and store it in bseqs.</p>
 <pre class="r"><code>bseqs$GC &lt;- (Gs + Cs) / (Gs + Cs + As + Ts)
 bseqs$pGC &lt;- paste(signif(bseqs$GC * 100, digits = 3), &quot;%&quot;)</code></pre>
 </div>
-<div id="sequence-1-analysis-hq433692.1" class="section level2">
-<h2>Sequence 1 analysis: HQ433692.1</h2>
-<div id="sequence" class="section level3">
-<h3>Sequence</h3>
+<div id="sequences" class="section level2">
+<h2>Sequences</h2>
+<div id="sequence-1-hq433692.1" class="section level3">
+<h3>Sequence 1: HQ433692.1</h3>
 <pre class="r"><code>bseqs$Sequence[1]</code></pre>
 <pre><code>## [1] &quot;AGCATGCAAGTCAAACGAGATGTAGCAATACATCTAGTGGCGAACGGGTGAGTAACGCGTGGATGATCTACCTATGAGATGGGGATAACTATTAGAAATAGTAGCTAATACCGAATAAGGTCAATTAATTTGTTAATTGATGAAAGGAAGCCTTTAAAGCTTCGCTTGTAGATGAGTCTGCGTCTTATTAGTTAGTTGGTAGGGTAAATGCCTACCAAGGCGATGATAAGTAACCGGCCTGAGAGGGTGAACGGTCACACTGGAACTGAGACACGGTCCAGACTCCTACGGGAGGCAGCAGCTAAGAATCTTCCGCAATGGGCGAAAGCCTGACGGAGCGACACTGCGTGAATGAAGAAGGTCGAAAGATTGTAAAATTCTTTTATAAATGAGGAATAAGCTTTGTAGGAAATGACGAAGTGATGACGTTAATTTATGAATAAGCCCCGGCTAATTACGTGCCAGCAGCCGCGGTAATACG&quot;</code></pre>
 </div>
-<div id="nucleotide-breakdown" class="section level3">
-<h3>Nucleotide breakdown</h3>
+<div id="sequence-2-hq433694.1" class="section level3">
+<h3>Sequence 2: HQ433694.1</h3>
+<pre class="r"><code>bseqs$Sequence[2]</code></pre>
+<pre><code>## [1] &quot;AGCATGCAAGTCAAACGGGATGTAGCAATACATTCAGTGGCGAACGGGTGAGTAACGCGTGGATGATCTACCTATGAGATGGGGATAACTATTAGAAATAGTAGCTAATACCGAATAAGGTCAGTTAATTTGTTAATTGATGAAAGGAAGCCTTTAAAGCTTCGCTTGTAGATGAGTCTGCGTCTTATTAGCTAGTTGGTAGGGTAAATGCCTACCAAGGCAATGATAAGTAACCGGCCTGAGAGGGTGAACGGTCACACTGGAACTGAGATACGGTCCAGACTCCTACGGGAGGCAGCAGCTAAGAATCTTCCGCAATGGGCGAAAGCCTGACGGAGCGACACTGCGTGAATGAAGAAGGTCGAAAGATTGTAAAATTCTTTTATAAATGAGGAATAAGCTTTGTAGGAAATGACAAAGTGATGACGTTAATTTATGAATAAGCCCCGGCTAATTACGTGCCAGCAGCAGCGGTAATACG&quot;</code></pre>
+</div>
+<div id="sequence-3-hq433691.1" class="section level3">
+<h3>Sequence 3: HQ433691.1</h3>
+<pre class="r"><code>bseqs$Sequence[3]</code></pre>
+<pre><code>## [1] &quot;AGCATGCAAGTCAAACGAGATGTAGTAATACATCTAGTGGCGAACGGGTGAGTAACGCGTGGATGATCTACCTATGAGATGGGGATAACTATTAGAAATAGTAGCTAATACCGAATAAGGTCAATTAATTTGTTAATTGATGAAAGGAAGCCTTTAAAGCTTCGCTTGTAGATGAGTCTGCGTCTTATTAGTTAGTTGGTAGGGTAAATGCCTACCAAGGCGATGATAAGTAACCGGCCTGAGAGGGTGAACGGTCACACTGGAACTGAGACACGGTCCAGACTCCTACGGGAGGCAGCAGCTAAGAATCTTCCGCAATGGGCGAAAGCCTGACGGAGCGACACTGCGTGAATGAAGAAGGTCGAAAGATTGTAAAATTCTTTTATAAATGAGGAATAAGCTTTGTAGGAAATGACGAAGTGATGACGTTAATTTATGAATAAGCCCCGGCTAATTACGTGCCAGCAGCCGCGGTAATACG&quot;</code></pre>
+</div>
+</div>
+<div id="summary-tables" class="section level2">
+<h2>Summary Tables</h2>
+</div>
+<div id="nucleotide-breakdown" class="section level2">
+<h2>Nucleotide breakdown</h2>
 <pre class="r"><code>library(knitr)
 library(dplyr)
 
-Table1 &lt;- bseqs %&gt;%
-  filter(Sequence.ID == &quot;HQ433692.1&quot;) %&gt;%
-  select(As, Ts, Gs, Cs)
-
-kable(Table1, caption=&quot;HQ433692.1 16S ribosome sequence nucleotide breakdown&quot;)</code></pre>
+TableGC &lt;- bseqs[c(&quot;Sequence.ID&quot;, &quot;As&quot;, &quot;Ts&quot;, &quot;Gs&quot;, &quot;Cs&quot;)]
+kable(TableGC, caption=&quot;Table 1. Nucleotide breakdown per sequence&quot;, col.names = c(&quot;Sequence ID&quot;,
+                                                                        &quot;Total As&quot;, &quot;Total Ts&quot;,
+                                                                        &quot;Total Gs&quot;, &quot;Total Cs&quot;))</code></pre>
 <table>
-<caption>HQ433692.1 16S ribosome sequence nucleotide breakdown</caption>
+<caption>Table 1. Nucleotide breakdown per sequence</caption>
 <thead>
 <tr class="header">
-<th align="right">As</th>
-<th align="right">Ts</th>
-<th align="right">Gs</th>
-<th align="right">Cs</th>
+<th align="left">Sequence ID</th>
+<th align="right">Total As</th>
+<th align="right">Total Ts</th>
+<th align="right">Total Gs</th>
+<th align="right">Total Cs</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
+<td align="left">HQ433692.1</td>
 <td align="right">154</td>
 <td align="right">114</td>
 <td align="right">131</td>
 <td align="right">82</td>
 </tr>
-</tbody>
-</table>
-</div>
-</div>
-<div id="sequence-2-analysis-hq433694.1" class="section level2">
-<h2>Sequence 2 analysis: HQ433694.1</h2>
-<div id="sequence-1" class="section level3">
-<h3>Sequence</h3>
-<pre class="r"><code>bseqs$Sequence[2]</code></pre>
-<pre><code>## [1] &quot;AGCATGCAAGTCAAACGGGATGTAGCAATACATTCAGTGGCGAACGGGTGAGTAACGCGTGGATGATCTACCTATGAGATGGGGATAACTATTAGAAATAGTAGCTAATACCGAATAAGGTCAGTTAATTTGTTAATTGATGAAAGGAAGCCTTTAAAGCTTCGCTTGTAGATGAGTCTGCGTCTTATTAGCTAGTTGGTAGGGTAAATGCCTACCAAGGCAATGATAAGTAACCGGCCTGAGAGGGTGAACGGTCACACTGGAACTGAGATACGGTCCAGACTCCTACGGGAGGCAGCAGCTAAGAATCTTCCGCAATGGGCGAAAGCCTGACGGAGCGACACTGCGTGAATGAAGAAGGTCGAAAGATTGTAAAATTCTTTTATAAATGAGGAATAAGCTTTGTAGGAAATGACAAAGTGATGACGTTAATTTATGAATAAGCCCCGGCTAATTACGTGCCAGCAGCAGCGGTAATACG&quot;</code></pre>
-</div>
-<div id="nucleotide-breakdown-1" class="section level3">
-<h3>Nucleotide breakdown</h3>
-<pre class="r"><code>bseqs$Sequence.ID[2]</code></pre>
-<pre><code>## [1] HQ433694.1
-## Levels: HQ433691.1 HQ433692.1 HQ433694.1</code></pre>
-<pre class="r"><code>Table2 &lt;- bseqs %&gt;%
-  filter(Sequence.ID == &quot;HQ433694.1&quot;) %&gt;%
-  select(As, Ts, Gs, Cs)
-
-kable(Table2, caption=&quot;HQ433694.1 16S ribosome sequence nucleotide breakdown&quot;)</code></pre>
-<table>
-<caption>HQ433694.1 16S ribosome sequence nucleotide breakdown</caption>
-<thead>
-<tr class="header">
-<th align="right">As</th>
-<th align="right">Ts</th>
-<th align="right">Gs</th>
-<th align="right">Cs</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
+<tr class="even">
+<td align="left">HQ433694.1</td>
 <td align="right">155</td>
 <td align="right">114</td>
 <td align="right">131</td>
 <td align="right">81</td>
 </tr>
-</tbody>
-</table>
-</div>
-</div>
-<div id="sequence-3-analysis-hq433691.1" class="section level2">
-<h2>Sequence 3 analysis: HQ433691.1</h2>
-<div id="sequence-2" class="section level3">
-<h3>Sequence</h3>
-<pre class="r"><code>bseqs$Sequence[3]</code></pre>
-<pre><code>## [1] &quot;AGCATGCAAGTCAAACGAGATGTAGTAATACATCTAGTGGCGAACGGGTGAGTAACGCGTGGATGATCTACCTATGAGATGGGGATAACTATTAGAAATAGTAGCTAATACCGAATAAGGTCAATTAATTTGTTAATTGATGAAAGGAAGCCTTTAAAGCTTCGCTTGTAGATGAGTCTGCGTCTTATTAGTTAGTTGGTAGGGTAAATGCCTACCAAGGCGATGATAAGTAACCGGCCTGAGAGGGTGAACGGTCACACTGGAACTGAGACACGGTCCAGACTCCTACGGGAGGCAGCAGCTAAGAATCTTCCGCAATGGGCGAAAGCCTGACGGAGCGACACTGCGTGAATGAAGAAGGTCGAAAGATTGTAAAATTCTTTTATAAATGAGGAATAAGCTTTGTAGGAAATGACGAAGTGATGACGTTAATTTATGAATAAGCCCCGGCTAATTACGTGCCAGCAGCCGCGGTAATACG&quot;</code></pre>
-</div>
-<div id="nucleotide-breakdown-2" class="section level3">
-<h3>Nucleotide breakdown</h3>
-<pre class="r"><code>bseqs$Sequence.ID[3]</code></pre>
-<pre><code>## [1] HQ433691.1
-## Levels: HQ433691.1 HQ433692.1 HQ433694.1</code></pre>
-<pre class="r"><code>Table3 &lt;- bseqs %&gt;%
-  filter(Sequence.ID == &quot;HQ433691.1&quot;) %&gt;%
-  select(As, Ts, Gs, Cs)
-
-kable(Table3, caption=&quot;HQ433691.1 16S ribosome sequence nucleotide breakdown&quot;)</code></pre>
-<table>
-<caption>HQ433691.1 16S ribosome sequence nucleotide breakdown</caption>
-<thead>
-<tr class="header">
-<th align="right">As</th>
-<th align="right">Ts</th>
-<th align="right">Gs</th>
-<th align="right">Cs</th>
-</tr>
-</thead>
-<tbody>
 <tr class="odd">
+<td align="left">HQ433691.1</td>
 <td align="right">154</td>
 <td align="right">115</td>
 <td align="right">131</td>
@@ -340,14 +299,13 @@ kable(Table3, caption=&quot;HQ433691.1 16S ribosome sequence nucleotide breakdow
 </tbody>
 </table>
 </div>
-</div>
 <div id="gc-content" class="section level2">
 <h2>GC content</h2>
 <pre class="r"><code>TableGC &lt;- bseqs[c(&quot;Sequence.ID&quot;, &quot;pGC&quot;)]
 names(TableGC) &lt;- c(&quot;Sequence ID&quot;, &quot;GC Content&quot;)
-kable(TableGC, caption=&quot;Percent GC content per sequence&quot;)</code></pre>
+kable(TableGC, caption=&quot;Table 2. Percent GC content per sequence.&quot;)</code></pre>
 <table>
-<caption>Percent GC content per sequence</caption>
+<caption>Table 2. Percent GC content per sequence.</caption>
 <thead>
 <tr class="header">
 <th align="left">Sequence ID</th>
@@ -383,22 +341,7 @@ kable(TableGC, caption=&quot;Percent GC content per sequence&quot;)</code></pre>
 <pre class="r"><code>library(ggplot2)
 
 dat &lt;- read.csv(&quot;GC_content.csv&quot;)
-str(dat)</code></pre>
-<pre><code>## 'data.frame':    1000 obs. of  4 variables:
-##  $ ID     : Factor w/ 1000 levels &quot;CC1082080.3&quot;,..: 514 221 282 479 230 472 489 862 403 303 ...
-##  $ Species: Factor w/ 3 levels &quot;A&quot;,&quot;B&quot;,&quot;C&quot;: 3 3 2 1 2 2 1 2 2 3 ...
-##  $ G      : num  24.5 27.4 30.6 21.9 31.9 ...
-##  $ C      : num  25.1 26.6 28.5 19.4 31 ...</code></pre>
-<pre class="r"><code>summary(dat)</code></pre>
-<pre><code>##            ID      Species       G               C        
-##  CC1082080.3:  1   A:336   Min.   :12.26   Min.   :11.54  
-##  CC1351010.4:  1   B:346   1st Qu.:22.53   1st Qu.:21.47  
-##  CC1397340.3:  1   C:318   Median :25.11   Median :23.84  
-##  CC1708810.1:  1           Mean   :25.26   Mean   :23.98  
-##  CC1850630.4:  1           3rd Qu.:28.04   3rd Qu.:26.62  
-##  CC2076380.4:  1           Max.   :38.78   Max.   :36.33  
-##  (Other)    :994</code></pre>
-<pre class="r"><code>dat$pGC &lt;- dat$G + dat$C
+dat$pGC &lt;- dat$G + dat$C
 
 ggplot(dat, aes(x = ID, y = pGC, colour = Species)) + 
   geom_point() + 

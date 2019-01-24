@@ -43,6 +43,11 @@ bseqs$Cs <- Cs
 bseqs$Gs <- Gs
 bseqs$As <- As
 bseqs$Ts <- Ts
+
+# Check to see if my counts for the individual nucleotides makes sense
+test_lengths <- bseqs$Cs + bseqs$Gs + bseqs$As + bseqs$Ts
+lengths <- c(nchar(bseqs$Sequence[1]), nchar(bseqs$Sequence[2]), nchar(bseqs$Sequence[3]))
+identical(test_lengths, lengths)
 ```
 
 Calculate %GC content and store it in bseqs. 
@@ -51,59 +56,37 @@ bseqs$GC <- (Gs + Cs) / (Gs + Cs + As + Ts)
 bseqs$pGC <- paste(signif(bseqs$GC * 100, digits = 3), "%")
 ```
 
-## Sequence 1 analysis: HQ433692.1
+## Sequences 
 
-### Sequence
+### Sequence 1: HQ433692.1
+
 ```{r}
 bseqs$Sequence[1]
 ```
 
-### Nucleotide breakdown
-```{r message=FALSE}
-library(knitr)
-library(dplyr)
+### Sequence 2: HQ433694.1
 
-Table1 <- bseqs %>%
-  filter(Sequence.ID == "HQ433692.1") %>%
-  select(As, Ts, Gs, Cs)
-
-kable(Table1, caption="HQ433692.1 16S ribosome sequence nucleotide breakdown")
-```
-
-## Sequence 2 analysis: HQ433694.1
-
-### Sequence
 ```{r}
 bseqs$Sequence[2]
 ```
 
-### Nucleotide breakdown
-```{r}
-bseqs$Sequence.ID[2]
+### Sequence 3: HQ433691.1
 
-Table2 <- bseqs %>%
-  filter(Sequence.ID == "HQ433694.1") %>%
-  select(As, Ts, Gs, Cs)
-
-kable(Table2, caption="HQ433694.1 16S ribosome sequence nucleotide breakdown")
-```
-
-## Sequence 3 analysis: HQ433691.1
-
-### Sequence
 ```{r}
 bseqs$Sequence[3]
 ```
 
-### Nucleotide breakdown
-```{r}
-bseqs$Sequence.ID[3]
+## Summary Tables
 
-Table3 <- bseqs %>%
-  filter(Sequence.ID == "HQ433691.1") %>%
-  select(As, Ts, Gs, Cs)
+## Nucleotide breakdown
+```{r message=FALSE}
+library(knitr)
+library(dplyr)
 
-kable(Table3, caption="HQ433691.1 16S ribosome sequence nucleotide breakdown")
+TableGC <- bseqs[c("Sequence.ID", "As", "Ts", "Gs", "Cs")]
+kable(TableGC, caption="Table 1. Nucleotide breakdown per sequence", col.names = c("Sequence ID",
+                                                                        "Total As", "Total Ts",
+                                                                        "Total Gs", "Total Cs"))
 ```
 
 ## GC content
@@ -111,7 +94,7 @@ kable(Table3, caption="HQ433691.1 16S ribosome sequence nucleotide breakdown")
 ```{r}
 TableGC <- bseqs[c("Sequence.ID", "pGC")]
 names(TableGC) <- c("Sequence ID", "GC Content")
-kable(TableGC, caption="Percent GC content per sequence")
+kable(TableGC, caption="Table 2. Percent GC content per sequence.")
 ```
 
 ## Bacteria information 
@@ -124,8 +107,6 @@ Wikipedia link for [*Borrelia burgdorferi*](https://en.wikipedia.org/wiki/Borrel
 library(ggplot2)
 
 dat <- read.csv("GC_content.csv")
-str(dat)
-summary(dat)
 dat$pGC <- dat$G + dat$C
 
 ggplot(dat, aes(x = ID, y = pGC, colour = Species)) + 
