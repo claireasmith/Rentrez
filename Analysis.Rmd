@@ -1,0 +1,141 @@
+---
+title: "Analysis"
+author: "Claire"
+date: "January 23, 2019"
+output: html_document
+---
+
+## Initial analysis
+
+Import and prepare "Sequences.csv".
+```{r}
+bseqs <- read.csv("Sequences.csv")
+names(bseqs) <- c("Sequence.ID", "Sequence")
+bseqs$Sequence <- as.character(bseqs$Sequence)
+
+summary(bseqs)
+```
+
+Count the numbers of each base pair in each of the three sequences. Store them in vectors As, Cs, Gs, and Ts. 
+```{r}
+As <- c()
+for (i in 1:nrow(bseqs)){
+  As[i] <- nchar(gsub("[^A]", "", bseqs[i,2]))
+}
+
+Cs <- c()
+for (i in 1:nrow(bseqs)){
+  Cs[i] <- nchar(gsub("[^C]", "", bseqs[i,2]))
+}
+
+Gs <- c()
+for (i in 1:nrow(bseqs)){
+  Gs[i] <- nchar(gsub("[^G]", "", bseqs[i,2]))
+}
+
+Ts <- c()
+for (i in 1:nrow(bseqs)){
+  Ts[i] <- nchar(gsub("[^T]", "", bseqs[i,2]))
+}
+```
+
+Store these vectors as columns in the dataframe bseqs. 
+```{r}
+bseqs$Cs <- Cs
+bseqs$Gs <- Gs
+bseqs$As <- As
+bseqs$Ts <- Ts
+```
+
+Calculate %GC content and store it in bseqs. 
+```{r}
+bseqs$GC <- (Gs + Cs) / (Gs + Cs + As + Ts)
+bseqs$pGC <- paste(signif(bseqs$GC * 100, digits = 3), "%")
+```
+
+## Sequence 1 analysis: HQ433692.1
+
+### Sequence
+```{r}
+bseqs$Sequence[1]
+```
+
+### Nucleotide breakdown
+```{r message=FALSE}
+library(knitr)
+library(dplyr)
+
+Table1 <- bseqs %>%
+  filter(Sequence.ID == "HQ433692.1") %>%
+  select(As, Ts, Gs, Cs)
+
+kable(Table1, caption="HQ433692.1 nucleotide breakdown")
+```
+
+## Sequence 2 analysis: HQ433694.1
+
+### Sequence
+```{r}
+bseqs$Sequence[2]
+```
+
+### Nucleotide breakdown
+```{r}
+bseqs$Sequence.ID[2]
+
+Table2 <- bseqs %>%
+  filter(Sequence.ID == "HQ433694.1") %>%
+  select(As, Ts, Gs, Cs)
+
+kable(Table2, caption="HQ433694.1 nucleotide breakdown")
+```
+
+## Sequence 3 analysis: HQ433691.1
+
+### Sequence
+```{r}
+bseqs$Sequence[3]
+```
+
+### Nucleotide breakdown
+```{r}
+bseqs$Sequence.ID[3]
+
+Table3 <- bseqs %>%
+  filter(Sequence.ID == "HQ433691.1") %>%
+  select(As, Ts, Gs, Cs)
+
+kable(Table3, caption="HQ433691.1 nucleotide breakdown")
+```
+
+## GC content
+
+```{r}
+TableGC <- bseqs[c("Sequence.ID", "pGC")]
+names(TableGC) <- c("Sequence ID", "GC Content")
+kable(TableGC, caption="Percent GC content per sequence")
+```
+
+## Bacteria information 
+Wikipedia link for [*Borrelia burgdorferi*](https://en.wikipedia.org/wiki/Borrelia_burgdorferi)
+
+![*Borrelia burgdorferi* bacteria](Bacteria.jpg)
+
+## "GC_content.csv" analysis
+```{r}
+library(ggplot2)
+
+dat <- read.csv("GC_content.csv")
+str(dat)
+summary(dat)
+dat$pGC <- dat$G + dat$C
+
+ggplot(dat, aes(x = Species, y = pGC, colour = Species)) + 
+  geom_jitter() + 
+  theme_classic() +
+  scale_y_continuous(name="% GC content") + 
+  scale_x_discrete(name="Species") + 
+  theme(legend.position = "none")
+
+```
+
